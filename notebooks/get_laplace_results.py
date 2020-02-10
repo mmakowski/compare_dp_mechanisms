@@ -81,7 +81,7 @@ snp_scores =  np.array([ss for name, ss in name_score_tuples])
 
 sensitivity = get_chisq_sensitivity(args.n_case, args.n_control)
 scale = sensitivity * 2.0 * args.k / args.e
-scores_perturbed = snp_scores + np.random.laplace(scale=scale, 
+scores_perturbed = snp_scores + np.random.laplace(scale=scale,
                                                   size=len(snp_scores))
 results_indices = np.argsort(scores_perturbed)[::-1][:args.k]
 results_names = map(indexed_snp_name_dict.get, results_indices)
@@ -89,5 +89,5 @@ results_names = map(indexed_snp_name_dict.get, results_indices)
 # <codecell>
 
 for nn in results_names:
-    print nn
+    print(nn)
 

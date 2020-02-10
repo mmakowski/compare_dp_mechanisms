@@ -91,5 +91,5 @@ results_names = map(indexed_snp_name_dict.get, results_indices)
 # <codecell>
 
 for nn in results_names:
-    print nn
+    print(nn)
 

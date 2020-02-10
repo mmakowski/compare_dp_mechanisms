@@ -28,7 +28,7 @@ def get_allelic_test_sensitivity(NN_case, NN_control):
         NN = SS + RR
         return 1.0 * 8 * NN**2 * SS / \
                 (RR * (2 * SS + 3) * (2 * SS + 1))
-    
+
     def sensitivity_type_2(SS, RR):
         NN = SS + RR
         return 1.0 * 4 * NN**2 * ((2 * RR**2 - 1) * (2 * SS - 1) - 1) / \
@@ -47,8 +47,8 @@ def check_table_valid(input_table):
         input_table: A 2x3 numpy matrix.
     """
     ## check zero margins
-    rowsum = np.array(map(np.sum, input_table))
-    colsum = np.array(map(np.sum, input_table.T))
+    rowsum = np.array(list(map(np.sum, input_table)))
+    colsum = np.array(list(map(np.sum, input_table.T)))
     if np.any(rowsum == 0) or np.any(colsum == 0):
         return False
     else:
@@ -65,8 +65,8 @@ def chisq_stat(input_table):
         A tuple (chisquare_statistics, degree_of_freedom).
     """
     input_table = input_table.astype(float)
-    rowsum = np.array(map(np.sum, input_table))
-    colsum = np.array(map(np.sum, input_table.T))
+    rowsum = np.array(list(map(np.sum, input_table)))
+    colsum = np.array(list(map(np.sum, input_table.T)))
     expected = np.outer(rowsum, colsum) / np.sum(rowsum)
     # df = (len([1 for rr in rowsum if rr > 0]) - 1) * \
     #     (len([1 for cc in colsum if cc > 0]) - 1)
@@ -88,11 +88,11 @@ def chisq_gradient(input_table):
         A four-element tuple consisting of the partial derivatives based on the
         parametrization the chi-square statistic by (r0, r1, n0, n1). The
         full parametrization would be
-        (r0, r1, r2, s0, s1, s2, n0, n1, n2), where ri + si = ni. The returned 
+        (r0, r1, r2, s0, s1, s2, n0, n1, n2), where ri + si = ni. The returned
         value will be scaled down by N^2 / (R * S).
     """
     input_table = input_table.astype(float)
-    colsum = np.array(map(np.sum, input_table.T))
+    colsum = np.array(list(map(np.sum, input_table.T)))
     ## divide each cell by colsum
     fraction_table = input_table / colsum
     dy_dr0, dy_dr1 = [2 * fraction_table[0, ii] - 2 * fraction_table[0, 2] for

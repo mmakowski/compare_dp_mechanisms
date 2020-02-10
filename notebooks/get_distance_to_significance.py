@@ -4,14 +4,14 @@
 # <markdowncell>
 
 # This function will calculate the distance to flipping the significance of a SNP.
-# 
+#
 # Reference: Johnson & Shmatikov (2013)
 
 # <markdowncell>
 
 # Assumptions:
-# 
-# * The MAF of the controls are fixed. 
+#
+# * The MAF of the controls are fixed.
 
 # <codecell>
 
@@ -58,7 +58,7 @@ DIRECTION_VECTORS = np.array([
 ])
 
 def augment_direction_vector(uu):
-    """Augment the direction vectors so that they are compatible with 2x3 input 
+    """Augment the direction vectors so that they are compatible with 2x3 input
     tables.
     Args:
         uu: direction vector for the cases
@@ -97,7 +97,7 @@ def move_is_legal(input_table, uu):
 def greedy_distance_to_significance_flip(input_table, threshold_pval):
     """Calculate the distance to flip the significance.
 
-    Distance is defined as the Hamming distance in the space of all databases. 
+    Distance is defined as the Hamming distance in the space of all databases.
 
     Args:
         input_table: A 2x3 numpy matrix.
@@ -134,7 +134,7 @@ def greedy_distance_to_significance_flip(input_table, threshold_pval):
         else:
             best_move_idx = legal_move_indices[np.argmin(directional_derivatives)]
         if gradient == 0:
-            print input_table
+            print(input_table)
         return DIRECTION_VECTORS[best_move_idx]
     ## make a copy of the input table
     input_table = input_table.copy()
@@ -143,7 +143,7 @@ def greedy_distance_to_significance_flip(input_table, threshold_pval):
     ## If sig_direction > 0, make table significant.
     ## If sig_direction < 0, make table insignificant.
     sig_direction = 1 if chisq_stat(input_table) < threshold_chisq else -1
-    curr_table = input_table.copy()
+    curr_table = input_table.copy().astype(np.float64)
     while 1:
         ## find best direction vector
         uu = find_best_legal_move(curr_table, sig_direction)
@@ -153,7 +153,7 @@ def greedy_distance_to_significance_flip(input_table, threshold_pval):
         curr_table += uu
         if DEBUG:
             print("chi-sqaure stat = {}, curr_table={}, uu={}".format(
-                  chisq_stat(curr_table), 
+                  chisq_stat(curr_table),
                   str(curr_table.tolist()),
                   str(uu.tolist())))
         dist += 1
@@ -168,14 +168,14 @@ def main():
     print("Begin to debug.")
     ## check chisq_stat()
     tt1 = np.array([[16, 17, 18],
-                    [10, 20, 5]])    
+                    [10, 20, 5]])
     assert round(chisq_stat(tt1), 3) == 6.214, "Error with chisq_stat()."
     ## check chisq_gradient()
     grad1 = chisq_gradient(tt1)
     assert map(round, grad1, [3] * len(grad1)) == [-0.334, -0.646, 0.234, 0.401],\
         "Error with chisq_gradient()."
     tt2 = np.array([[0, 17, 18],
-                    [10, 20, 5]]) 
+                    [10, 20, 5]])
     grad2 = chisq_gradient(tt2)
     assert map(round, grad2, [3] * len(grad2)) == [-1.565, -0.646, 0.612, 0.401],\
         "Error with chisq_gradient()."

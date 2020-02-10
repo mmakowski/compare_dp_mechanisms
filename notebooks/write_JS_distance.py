@@ -4,7 +4,7 @@
 # <markdowncell>
 
 # Write the JS distance to a file. Each line will have the following fields:
-# 
+#
 # * name: SNP name
 # * distance: JS distance
 
@@ -82,15 +82,15 @@ with open(args.infile, 'r') as infile, open(args.outfile, 'w') as outfile:
     headers = infile.readline().split()
     for line in infile:
         dd = dict(zip(headers, line.split()))
-        input_table = np.array([[int(dd['case_0']), 
+        input_table = np.array([[int(dd['case_0']),
                                  int(dd['case_1']),
-                                 int(dd['case_2'])], 
-                                [int(dd['ctrl_0']), 
+                                 int(dd['case_2'])],
+                                [int(dd['ctrl_0']),
                                  int(dd['ctrl_1']),
                                  int(dd['ctrl_2'])],])
         if not check_table_valid(input_table):
             continue
-        print dd['name']
+        print(dd['name'])
         dist = greedy_distance_to_significance_flip(input_table, pval)
         outfile.write('{}\t{}\n'.format(*[dd['name'], dist]))
 
